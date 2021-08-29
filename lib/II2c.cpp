@@ -33,7 +33,7 @@
 #include "hal/i2c/II2c.hpp"
 
 #include "hal/Error.hpp"
-#include "hal/utils/logger.hpp"
+#include "hal/logger/interfaces.hpp"
 
 #include <cassert>
 

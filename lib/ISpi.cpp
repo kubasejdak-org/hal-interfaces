@@ -33,7 +33,7 @@
 #include "hal/spi/ISpi.hpp"
 
 #include "hal/Error.hpp"
-#include "hal/utils/logger.hpp"
+#include "hal/logger/interfaces.hpp"
 
 #include <cassert>
 
