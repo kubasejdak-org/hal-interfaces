@@ -12,7 +12,7 @@ add_library(hal-interfaces EXCLUDE_FROM_ALL
     IHumiditySensor.cpp
     II2c.cpp
     IRtc.cpp
-    ISpi.cpps
+    ISpi.cpp
     ITemperatureSensor.cpp
     IUart.cpp
 )
