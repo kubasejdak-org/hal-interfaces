@@ -1,1 +1,1 @@
-# hal
+# hal-interfaces
