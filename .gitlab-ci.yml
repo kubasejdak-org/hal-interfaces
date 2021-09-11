@@ -12,4 +12,4 @@ include:
   - "/.gitlab/ci/build.yml"
   - "/.gitlab/ci/deploy.yml"
   - "/.gitlab/ci/quality.yml"
-#  - "/.gitlab/ci/trigger.yml"
+  - "/.gitlab/ci/trigger.yml"
