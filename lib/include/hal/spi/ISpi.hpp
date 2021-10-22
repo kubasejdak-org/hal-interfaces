@@ -43,15 +43,14 @@
 
 namespace hal::spi {
 
-// clang-format off
 /// Represents the clock phase and polarity selected to be used in the SPI transmission.
-enum class Mode {
+enum class Mode
+{
     eMode0,
     eMode1,
     eMode2,
     eMode3
 };
-// clang-format on
 
 /// Represents SPI parameters that can be set by each driver, which uses SPI.
 struct SpiParams {
