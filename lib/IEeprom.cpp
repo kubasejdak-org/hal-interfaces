@@ -36,6 +36,7 @@
 
 namespace hal::storage {
 
+// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
 IEeprom::IEeprom(std::size_t size, std::size_t pageSize)
     : Device(SharingPolicy::eSingle)
     , m_size(size)

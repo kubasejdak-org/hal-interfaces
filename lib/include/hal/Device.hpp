@@ -39,14 +39,13 @@
 
 namespace hal {
 
-// clang-format off
 /// Represents possible sharing policies of the HAL devices. Single devices can be only returned once from HAL,
 /// while shared devices can be returned multiple times and are internally synchronized if needed.
-enum class SharingPolicy {
+enum class SharingPolicy
+{
     eSingle,
     eShared
 };
-// clang-format on
 
 class IBoard;
 
