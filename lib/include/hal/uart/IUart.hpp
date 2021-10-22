@@ -44,7 +44,8 @@
 namespace hal::uart {
 
 /// Represents the baud rate (speed) used in the UART transmission.
-enum class Baudrate {
+enum class Baudrate
+{
     e1200 = 1200,     // NOLINT
     e2400 = 2400,     // NOLINT
     e4800 = 4800,     // NOLINT
@@ -58,19 +59,19 @@ enum class Baudrate {
     e921600 = 921600  // NOLINT
 };
 
-// clang-format off
 /// Represents possible UART configurations in traditional form (<data bits><parity><stop bits>).
-enum class Mode {
+enum class Mode
+{
     e8n1 // NOLINT
 };
 
 /// Represents the flow control selected to be used in the UART transmission.
-enum class FlowControl {
+enum class FlowControl
+{
     eNone,
     eRtsCts,
     eXonXoff
 };
-// clang-format on
 
 /// Represents a single UART device. All operations will be limited to the given instance of this class.
 class IUart : public Device {

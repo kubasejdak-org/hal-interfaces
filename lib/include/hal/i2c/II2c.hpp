@@ -45,7 +45,8 @@
 namespace hal::i2c {
 
 /// Represents the I2C addressing mode.
-enum class AddressingMode {
+enum class AddressingMode
+{
     e7bit, // NOLINT(readability-identifier-naming)
     e10bit // NOLINT(readability-identifier-naming)
 };
