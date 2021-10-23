@@ -1,7 +1,7 @@
 ---
 Checks:                '*,
                         -*-vararg,
-                        -altera-s*,
+                        -altera-*,
                         -bugprone-easily-swappable-parameters,
                         -bugprone-implicit-widening-of-multiplication-result,
                         -concurrency-mt-unsafe,
