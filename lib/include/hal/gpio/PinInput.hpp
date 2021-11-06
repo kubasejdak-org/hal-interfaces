@@ -40,6 +40,8 @@
 #include "hal/gpio/IPinInput.hpp"
 #include "hal/gpio/types.hpp"
 
+#include <utils/types/Result.hpp>
+
 #include <cassert>
 #include <memory>
 #include <utility>
@@ -73,14 +75,13 @@ public:
 
 private:
     /// @see IPinInput::get().
-    std::error_code get(bool& value) override
+    Result<bool> get(bool& value) override
     {
-        WidthType data{};
-        if (auto error = m_port->get(data, m_mask))
+        auto [value, error] = m_port->get(m_mask);
+        if (error)
             return error;
 
-        value = ((data == 0) == m_negated);
-        return Error::eOk;
+        return ((*value == 0) == m_negated);
     }
 
 private:

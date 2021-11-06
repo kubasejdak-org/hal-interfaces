@@ -35,6 +35,8 @@
 
 #include "hal/Error.hpp"
 
+#include <utils/types/Result.hpp>
+
 #include <system_error>
 
 namespace hal::gpio {
@@ -74,17 +76,16 @@ public:
     /// Sets direction mask for each register's pin.
     /// @param mask          Direction mask for each pin in the register (1 for input, 0 for output).
     /// @return Error code of the operation.
-    virtual std::error_code setDirection(WidthType /*unused*/) { return Error::eOk; }
+    virtual std::error_code setDirection(WidthType) { return Error::eOk; }
 
     /// Reads whole value from the GPIO register.
-    /// @param value        Output parameter with value read from the register.
-    /// @return Error code of the operation.
-    virtual std::error_code get(WidthType& /*unused*/) { return Error::eOk; }
+    /// @return Read value or error code of the operation.
+    virtual Result<WidthType> get() { return Error::eOk; }
 
     /// Writes whole value to the GPIO register.
     /// @param value        Value to be set in the register.
     /// @return Error code of the operation.
-    virtual std::error_code set(WidthType /*unused*/) { return Error::eOk; }
+    virtual std::error_code set(WidthType) { return Error::eOk; }
 };
 
 } // namespace hal::gpio

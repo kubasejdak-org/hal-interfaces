@@ -37,6 +37,8 @@
 #include "hal/gpio/IGpioPort.hpp"
 #include "hal/gpio/IPortInput.hpp"
 
+#include <utils/types/Result.hpp>
+
 #include <functional>
 #include <memory>
 #include <utility>
@@ -74,14 +76,13 @@ public:
     {}
 
     /// @see IPortInput::get().
-    std::error_code get(WidthType& value) override
+    Result<WidthType> get() override
     {
-        WidthTypeUnderlying originalValue{};
-        if (auto error = m_port->get(originalValue, m_mask))
+        auto [value, error] = m_port->get(m_mask);
+        if (error)
             return error;
 
-        value = m_modifier ? m_modifier(originalValue, m_mask) : originalValue;
-        return Error::eOk;
+        return m_modifier ? m_modifier(*value, m_mask) : *value;
     }
 
 private:

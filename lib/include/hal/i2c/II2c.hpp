@@ -38,6 +38,7 @@
 #include <osal/Mutex.hpp>
 #include <osal/Timeout.hpp>
 #include <utils/registry/GlobalRegistry.hpp>
+#include <utils/types/Result.hpp>
 
 #include <cstdint>
 #include <system_error>
@@ -128,24 +129,18 @@ public:
 
     /// Receives demanded number of bytes from the current I2C device.
     /// @param address          Address of the I2C slave device.
-    /// @param bytes            Vector where the received data will be placed by this method.
     /// @param size             Number of bytes to be received.
     /// @param timeout          Maximal time to wait for the bus.
-    /// @return Error code of the operation.
-    std::error_code read(std::uint16_t address, BytesVector& bytes, std::size_t size, osal::Timeout timeout);
+    /// @return Received data or error code of the operation.
+    Result<BytesVector> read(std::uint16_t address, std::size_t size, osal::Timeout timeout);
 
     /// Receives demanded number of bytes from the current I2C device.
     /// @param address          Address of the I2C slave device.
     /// @param bytes            Memory block where the received data will be placed by this method.
     /// @param size             Number of bytes to be received.
     /// @param timeout          Maximal time to wait for the bus.
-    /// @param actualReadSize   Actual number of received bytes.
-    /// @return Error code of the operation.
-    std::error_code read(std::uint16_t address,
-                         std::uint8_t* bytes,
-                         std::size_t size,
-                         osal::Timeout timeout,
-                         std::size_t& actualReadSize);
+    /// @return Number of received bytes or error code of the operation.
+    Result<std::size_t> read(std::uint16_t address, std::uint8_t* bytes, std::size_t size, osal::Timeout timeout);
 
 private:
     /// Checks if the I2C bus is locked.
@@ -192,14 +187,9 @@ private:
     /// @param bytes                 Memory block where the received data will be placed by this method.
     /// @param size                  Number of bytes to be received.
     /// @param timeout               Maximal time to wait for the bus.
-    /// @param actualReadSize        Actual number of received bytes.
-    /// @return Error code of the operation.
-    virtual std::error_code drvRead(std::uint16_t address,
-                                    std::uint8_t* bytes,
-                                    std::size_t size,
-                                    osal::Timeout timeout,
-                                    std::size_t& actualReadSize)
-        = 0;
+    /// @return Number of received bytes or error code of the operation.
+    virtual Result<std::size_t>
+    drvRead(std::uint16_t address, std::uint8_t* bytes, std::size_t size, osal::Timeout timeout) = 0;
 
 private:
     std::uint32_t m_userCount{};

@@ -35,6 +35,8 @@
 #include "hal/Error.hpp"
 #include "hal/gpio/IGpioPort.hpp"
 
+#include <utils/types/Result.hpp>
+
 #include <system_error>
 
 namespace hal::gpio {
@@ -46,10 +48,10 @@ template <typename WidthType>
 class GpioPortStub : public IGpioPort<WidthType> {
 private:
     /// @see IGpioPort::get().
-    std::error_code get(WidthType& /*unused*/, WidthType /*unused*/) override { return Error::eOk; }
+    Result<WidthType> get(WidthType) override { return Error::eOk; }
 
     /// @see IGpioPort::set().
-    std::error_code set(WidthType /*unused*/, WidthType /*unused*/) override { return Error::eOk; }
+    std::error_code set(WidthType, WidthType) override { return Error::eOk; }
 };
 
 } // namespace hal::gpio

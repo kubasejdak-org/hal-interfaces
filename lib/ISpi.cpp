@@ -163,52 +163,52 @@ std::error_code ISpi::write(const std::uint8_t* bytes, std::size_t size, osal::T
     return drvWrite(bytes, size, timeout);
 }
 
-std::error_code ISpi::read(BytesVector& bytes, std::size_t size, osal::Timeout timeout)
+Result<BytesVector> ISpi::read(std::size_t size, osal::Timeout timeout)
 {
-    bytes.resize(size);
+    BytesVector bytes(size);
     if (bytes.size() != size) {
         SpiLogger::error("Failed to read: cannot resize output vector");
         return Error::eNoMemory;
     }
 
-    std::size_t actualReadSize{};
-    auto error = read(bytes.data(), size, timeout, actualReadSize);
-    bytes.resize(actualReadSize);
-    return error;
+    auto [actualReadSize, error] = read(bytes.data(), size, timeout);
+    if (error) {
+        SpiLogger::error("Failed to read: err={}", error.message());
+        return error;
+    }
+
+    bytes.resize(*actualReadSize);
+    return bytes;
 }
 
-std::error_code ISpi::read(std::uint8_t* bytes, std::size_t size, osal::Timeout timeout, std::size_t& actualReadSize)
+Result<std::size_t> ISpi::read(std::uint8_t* bytes, std::size_t size, osal::Timeout timeout)
 {
     if (auto error = checkState()) {
         SpiLogger::error("Failed to read: invalid state err={}", error.message());
         return error;
     }
 
-    actualReadSize = 0;
-    return drvRead(bytes, size, timeout, actualReadSize);
+    return drvRead(bytes, size, timeout);
 }
 
-std::error_code ISpi::transfer(const BytesVector& txBytes, BytesVector& rxBytes, osal::Timeout timeout)
+Result<BytesVector> ISpi::transfer(const BytesVector& txBytes, osal::Timeout timeout)
 {
-    rxBytes.resize(txBytes.size());
+    BytesVector rxBytes(txBytes.size());
     if (rxBytes.size() != txBytes.size()) {
         SpiLogger::error("Failed to transfer: cannot resize output vector");
         return Error::eNoMemory;
     }
 
-    std::size_t actualReadSize{};
-    if (auto error = transfer(txBytes.data(), rxBytes.data(), txBytes.size(), timeout, actualReadSize))
+    auto [actualReadSize, error] = transfer(txBytes.data(), rxBytes.data(), txBytes.size(), timeout);
+    if (error)
         return error;
 
-    rxBytes.resize(actualReadSize);
-    return Error::eOk;
+    rxBytes.resize(*actualReadSize);
+    return rxBytes;
 }
 
-std::error_code ISpi::transfer(const std::uint8_t* txBytes,
-                               std::uint8_t* rxBytes,
-                               std::size_t size,
-                               osal::Timeout timeout,
-                               std::size_t& actualReadSize)
+Result<std::size_t>
+ISpi::transfer(const std::uint8_t* txBytes, std::uint8_t* rxBytes, std::size_t size, osal::Timeout timeout)
 {
     if ((txBytes == nullptr) && (rxBytes == nullptr)) {
         SpiLogger::error("Failed to transfer: txBytes={}, rxBytes={}", txBytes, rxBytes);
@@ -220,8 +220,7 @@ std::error_code ISpi::transfer(const std::uint8_t* txBytes,
         return error;
     }
 
-    actualReadSize = 0;
-    return drvTransfer(txBytes, rxBytes, size, timeout, actualReadSize);
+    return drvTransfer(txBytes, rxBytes, size, timeout);
 }
 
 bool ISpi::isLocked()

@@ -40,15 +40,15 @@ ITemperatureSensor::ITemperatureSensor()
     : Device(SharingPolicy::eShared)
 {}
 
-std::error_code ITemperatureSensor::read(float& temperature)
+Result<float> ITemperatureSensor::read()
 {
-    auto error = drvRead(temperature);
-    if (!error) {
-        assert(temperature >= minValue());
-        assert(temperature <= maxValue());
-    }
+    auto [temperature, error] = drvRead();
+    if (error)
+        return error;
 
-    return error;
+    assert(*temperature >= minValue());
+    assert(*temperature <= maxValue());
+    return *temperature;
 }
 
 } // namespace hal::sensor
