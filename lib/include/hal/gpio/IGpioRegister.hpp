@@ -76,7 +76,7 @@ public:
     /// Sets direction mask for each register's pin.
     /// @param mask          Direction mask for each pin in the register (1 for input, 0 for output).
     /// @return Error code of the operation.
-    virtual std::error_code setDirection(WidthType) { return Error::eOk; }
+    virtual std::error_code setDirection(WidthType /*unused*/) { return Error::eOk; }
 
     /// Reads whole value from the GPIO register.
     /// @return Read value or error code of the operation.
@@ -85,7 +85,7 @@ public:
     /// Writes whole value to the GPIO register.
     /// @param value        Value to be set in the register.
     /// @return Error code of the operation.
-    virtual std::error_code set(WidthType) { return Error::eOk; }
+    virtual std::error_code set(WidthType /*unused*/) { return Error::eOk; }
 };
 
 } // namespace hal::gpio

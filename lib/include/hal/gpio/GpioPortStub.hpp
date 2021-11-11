@@ -48,10 +48,10 @@ template <typename WidthType>
 class GpioPortStub : public IGpioPort<WidthType> {
 private:
     /// @see IGpioPort::get().
-    Result<WidthType> get(WidthType) override { return Error::eOk; }
+    Result<WidthType> get(WidthType /*unused*/) override { return Error::eOk; }
 
     /// @see IGpioPort::set().
-    std::error_code set(WidthType, WidthType) override { return Error::eOk; }
+    std::error_code set(WidthType /*unused*/, WidthType /*unused*/) override { return Error::eOk; }
 };
 
 } // namespace hal::gpio
