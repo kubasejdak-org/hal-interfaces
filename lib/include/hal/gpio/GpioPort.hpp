@@ -82,7 +82,7 @@ public:
         if (error)
             return error;
 
-        return *value & mask;
+        return static_cast<WidthType>(*value & mask);
     }
 
     /// @see IGpioPort::set().
