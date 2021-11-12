@@ -82,7 +82,7 @@ public:
         if (error)
             return error;
 
-        return m_modifier ? m_modifier(*value, m_mask) : *value;
+        return static_cast<WidthType>(m_modifier ? m_modifier(*value, m_mask) : *value);
     }
 
 private:
