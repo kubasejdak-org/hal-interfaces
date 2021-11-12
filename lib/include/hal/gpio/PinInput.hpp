@@ -75,7 +75,7 @@ public:
 
 private:
     /// @see IPinInput::get().
-    Result<bool> get(bool& value) override
+    Result<bool> get() override
     {
         auto [value, error] = m_port->get(m_mask);
         if (error)
