@@ -34,7 +34,7 @@
 
 #include "hal/Device.hpp"
 
-#include <system_error>
+#include <utils/types/Result.hpp>
 
 namespace hal::sensor {
 
@@ -45,9 +45,8 @@ public:
     ITemperatureSensor();
 
     /// Reads the current temperature value from the sensor.
-    /// @param temperature          Output parameter with the temperature value in Celsius degrees.
-    /// @return Error code of the operation.
-    std::error_code read(float& temperature);
+    /// @return Temperature value in Celsius degrees or error code of the operation.
+    Result<float> read();
 
     /// Returns the minimal value of the temperature that can be returned from this device in Celsius degrees.
     /// @return Minimal value of the temperature that can be returned from this device in Celsius degrees.
@@ -59,9 +58,8 @@ public:
 
 private:
     /// Device specific implementation of the method that reads the current temperature value in Celsius degrees.
-    /// @param temperature          Output parameter with the temperature value in Celsius degrees.
-    /// @return Error code of the operation.
-    virtual std::error_code drvRead(float& temperature) = 0;
+    /// @return Temperature value in Celsius degrees or error code of the operation.
+    virtual Result<float> drvRead() = 0;
 };
 
 } // namespace hal::sensor

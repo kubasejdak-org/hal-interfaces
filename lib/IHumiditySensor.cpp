@@ -40,15 +40,15 @@ IHumiditySensor::IHumiditySensor()
     : Device(SharingPolicy::eShared)
 {}
 
-std::error_code IHumiditySensor::read(float& relativeHumidity)
+Result<float> IHumiditySensor::read()
 {
-    auto error = drvRead(relativeHumidity);
-    if (!error) {
-        assert(relativeHumidity >= minValue());
-        assert(relativeHumidity <= maxValue());
-    }
+    auto [humidity, error] = drvRead();
+    if (error)
+        return error;
 
-    return error;
+    assert(*humidity >= minValue());
+    assert(*humidity <= maxValue());
+    return *humidity;
 }
 
 } // namespace hal::sensor

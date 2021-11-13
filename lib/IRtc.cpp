@@ -80,26 +80,16 @@ IRtc::IRtc()
     : Device(SharingPolicy::eShared)
 {}
 
-std::error_code IRtc::getTime(std::tm& tm)
+Result<std::tm> IRtc::getTime()
 {
-    if (auto error = drvGetTime(tm))
+    auto [tm, error] = drvGetTime();
+    if (error)
         return error;
 
-    return isValidTime(tm) ? Error::eOk : Error::eHardwareError;
-}
-
-std::error_code IRtc::getTime(std::time_t& time)
-{
-    std::tm tm{};
-    if (auto error = getTime(tm))
-        return error;
-
-    auto result = std::mktime(&tm);
-    if (result == static_cast<std::time_t>(-1))
+    if (!isValidTime(*tm))
         return Error::eHardwareError;
 
-    time = result;
-    return Error::eOk;
+    return *tm;
 }
 
 std::error_code IRtc::setTime(const std::tm& tm)
@@ -116,15 +106,6 @@ std::error_code IRtc::setTime(const std::tm& tm)
 
     m_initialized = static_cast<bool>(!error);
     return error;
-}
-
-std::error_code IRtc::setTime(const std::time_t& time)
-{
-    std::tm tm{};
-    if (gmtime_r(&time, &tm) == nullptr)
-        return Error::eInvalidArgument;
-
-    return setTime(tm);
 }
 
 } // namespace hal::time

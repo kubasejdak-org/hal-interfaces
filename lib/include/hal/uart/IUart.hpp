@@ -38,6 +38,7 @@
 
 #include <osal/Timeout.hpp>
 #include <utils/registry/GlobalRegistry.hpp>
+#include <utils/types/Result.hpp>
 
 #include <system_error>
 
@@ -149,25 +150,21 @@ public:
     std::error_code write(const std::uint8_t* bytes, std::size_t size);
 
     /// Receives the demanded number of bytes from the current UART instance.
-    /// @param bytes                Vector where the received data will be placed by this method.
     /// @param size                 Number of bytes to be received from the current UART instance.
     /// @param timeout              Maximal time to wait for the data.
-    /// @return Error code of the operation.
-    /// @note This method does not assume, that the output vector has the proper capacity. It will be
-    ///       automatically expanded, if needed, by the container itself. Size of the vector after call
-    ///       to this method will indicate the actual number of received bytes.
-    std::error_code read(BytesVector& bytes, std::size_t size, osal::Timeout timeout);
+    /// @return Vector with received data or error code of the operation.
+    /// @note Size of the vector after call to this method will indicate the actual number of received bytes.
+    Result<BytesVector> read(std::size_t size, osal::Timeout timeout);
 
     /// Receives the demanded number of bytes from the current UART instance.
     /// @param bytes                Memory block where the received data will be placed by this method.
     /// @param size                 Number of bytes to be received from the current UART instance.
     /// @param timeout              Maximal time to wait for the data.
-    /// @param actualReadSize       Actual number of received bytes.
-    /// @return Error code of the operation.
+    /// @return Number of received bytes or error code of the operation.
     /// @note This method assumes, that the output memory block has the proper capacity. After call to this
-    ///       method the 'actualReadSize' parameter will indicate the actual number of received bytes.
+    ///       method the return value will indicate the actual number of received bytes.
     ///       It is also assumed, that output memory block is empty.
-    std::error_code read(std::uint8_t* bytes, std::size_t size, osal::Timeout timeout, std::size_t& actualReadSize);
+    Result<std::size_t> read(std::uint8_t* bytes, std::size_t size, osal::Timeout timeout);
 
 private:
     /// Device specific implementation of the opening transmission channel.
@@ -203,11 +200,8 @@ private:
     /// @param bytes                Memory block where the received data will be placed by this method.
     /// @param size                 Number of bytes to be received from the current UART instance.
     /// @param timeout              Maximal time to wait for the data.
-    /// @param actualReadSize       Actual number of received bytes.
-    /// @return Error code of the operation.
-    virtual std::error_code
-    drvRead(std::uint8_t* bytes, std::size_t size, osal::Timeout timeout, std::size_t& actualReadSize)
-        = 0;
+    /// @return Number of received bytes or error code of the operation.
+    virtual Result<std::size_t> drvRead(std::uint8_t* bytes, std::size_t size, osal::Timeout timeout) = 0;
 
 private:
     bool m_opened{};

@@ -36,6 +36,7 @@
 #include "hal/gpio/types.hpp"
 
 #include <utils/registry/GlobalRegistry.hpp>
+#include <utils/types/Result.hpp>
 
 #include <system_error>
 
@@ -72,10 +73,9 @@ public:
     IGpioPort& operator=(IGpioPort&&) noexcept = delete;
 
     /// Reads the demanded set of GPIO port bits defined by the mask.
-    /// @param value        Output argument where the read value will be stored.
     /// @param mask         Mask defining which port bits should be read.
-    /// @return Error code of the operation.
-    virtual std::error_code get(WidthType& value, WidthType mask) = 0;
+    /// @return Read value or error code of the operation.
+    virtual Result<WidthType> get(WidthType mask) = 0;
 
     /// Writes the demanded set of GPIO port bits defined by the mask.
     /// @param value        Value to be written to the GPIO port.

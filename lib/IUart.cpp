@@ -96,21 +96,21 @@ std::error_code IUart::write(const std::uint8_t* bytes, std::size_t size)
     return drvWrite(bytes, size);
 }
 
-std::error_code IUart::read(BytesVector& bytes, std::size_t size, osal::Timeout timeout)
+Result<BytesVector> IUart::read(std::size_t size, osal::Timeout timeout)
 {
-    bytes.resize(size);
+    BytesVector bytes(size);
     if (bytes.size() != size)
         return Error::eNoMemory;
 
-    std::size_t actualReadSize{};
-    if (auto error = read(bytes.data(), size, timeout, actualReadSize))
+    auto [actualReadSize, error] = read(bytes.data(), size, timeout);
+    if (error)
         return error;
 
-    bytes.resize(actualReadSize);
-    return Error::eOk;
+    bytes.resize(*actualReadSize);
+    return bytes;
 }
 
-std::error_code IUart::read(std::uint8_t* bytes, std::size_t size, osal::Timeout timeout, std::size_t& actualReadSize)
+Result<std::size_t> IUart::read(std::uint8_t* bytes, std::size_t size, osal::Timeout timeout)
 {
     if (bytes == nullptr)
         return Error::eInvalidArgument;
@@ -118,8 +118,7 @@ std::error_code IUart::read(std::uint8_t* bytes, std::size_t size, osal::Timeout
     if (!isOpened())
         return Error::eDeviceNotOpened;
 
-    actualReadSize = 0;
-    return drvRead(bytes, size, timeout, actualReadSize);
+    return drvRead(bytes, size, timeout);
 }
 
 } // namespace hal::uart
