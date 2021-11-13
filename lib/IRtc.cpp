@@ -86,7 +86,10 @@ Result<std::tm> IRtc::getTime()
     if (error)
         return error;
 
-    return isValidTime(*tm) ? Error::eOk : Error::eHardwareError;
+    if (!isValidTime(*tm))
+        return Error::eHardwareError;
+
+    return *tm;
 }
 
 std::error_code IRtc::setTime(const std::tm& tm)
