@@ -38,6 +38,7 @@
 #include <osal/Mutex.hpp>
 #include <osal/Timeout.hpp>
 #include <utils/registry/GlobalRegistry.hpp>
+#include <utils/types/Result.hpp>
 
 #include <system_error>
 
@@ -128,39 +129,32 @@ public:
     std::error_code write(const std::uint8_t* bytes, std::size_t size, osal::Timeout timeout);
 
     /// Receives the demanded number of bytes from the SPI device.
-    /// @param bytes                Vector where the received data will be placed.
     /// @param size                 Number of bytes to be received.
     /// @param timeoutMs            Maximal time to wait for the bus.
-    /// @return Error code of the operation.
-    std::error_code read(BytesVector& bytes, std::size_t size, osal::Timeout timeout);
+    /// @return Vector with received data or error code of the operation.
+    Result<BytesVector> read(std::size_t size, osal::Timeout timeout);
 
     /// Receives the demanded number of bytes from the SPI device.
     /// @param bytes                Memory block where the received data will be placed.
     /// @param size                 Number of bytes to be received.
     /// @param timeout              Maximal time to wait for the bus.
-    /// @param actualReadSize       Actual number of received bytes.
-    /// @return Error code of the operation.
-    std::error_code read(std::uint8_t* bytes, std::size_t size, osal::Timeout timeout, std::size_t& actualReadSize);
+    /// @return Received data or error code of the operation.
+    Result<std::size_t> read(std::uint8_t* bytes, std::size_t size, osal::Timeout timeout);
 
     /// Transmits given vector of bytes to the SPI device and concurrently reads its response.
     /// @param txBytes              Vector of raw bytes to be transmitted.
-    /// @param rxBytes              Vector where the received data will be placed.
     /// @param timeout              Maximal time to wait for the bus.
-    /// @return Error code of the operation.
-    std::error_code transfer(const BytesVector& txBytes, BytesVector& rxBytes, osal::Timeout timeout);
+    /// @return Vector with received data or error code of the operation.
+    Result<BytesVector> transfer(const BytesVector& txBytes, osal::Timeout timeout);
 
     /// Transmits given memory block of bytes to the SPI device and concurrently reads its response.
     /// @param txBytes              Memory block of raw bytes to be transmitted.
     /// @param rxBytes              Memory block where the received data will be placed.
     /// @param size                 Size of the memory block to be transferred.
     /// @param timeout              Maximal time to wait for the bus.
-    /// @param actualReadSize       Actual number of received bytes.
-    /// @return Error code of the operation.
-    std::error_code transfer(const std::uint8_t* txBytes,
-                             std::uint8_t* rxBytes,
-                             std::size_t size,
-                             osal::Timeout timeout,
-                             std::size_t& actualReadSize);
+    /// @return Number of received bytes or error code of the operation.
+    Result<std::size_t>
+    transfer(const std::uint8_t* txBytes, std::uint8_t* rxBytes, std::size_t size, osal::Timeout timeout);
 
 private:
     /// Checks if the SPI bus is locked.
@@ -197,34 +191,27 @@ private:
     virtual std::error_code drvSetParams(SpiParams params) = 0;
 
     /// Driver specific implementation of transmitting given memory block of bytes to the SPI device.
-    /// @param data                 Data to be transmitted.
+    /// @param bytes                Data to be transmitted.
     /// @param size                 Number of data to transmit.
     /// @param timeout              Maximal time to wait for the bus.
     /// @return Error code of the operation.
     virtual std::error_code drvWrite(const std::uint8_t* bytes, std::size_t size, osal::Timeout timeout) = 0;
 
     /// Driver specific implementation of the receiving demanded number of bytes from the SPI device.
-    /// @param data                 Place where received data should be placed.
+    /// @param bytes                Memory block where the received data will be placed.
     /// @param size                 Number of data to receive.
     /// @param timeout              Maximal time to wait for the bus.
-    /// @return Error code of the operation.
-    virtual std::error_code
-    drvRead(std::uint8_t* bytes, std::size_t size, osal::Timeout timeout, std::size_t& actualReadSize)
-        = 0;
+    /// @return Number of received bytes or error code of the operation.
+    virtual Result<std::size_t> drvRead(std::uint8_t* bytes, std::size_t size, osal::Timeout timeout) = 0;
 
     /// Driver specific implementation of the sending specific number of words.
-    /// @param txData               Data to be transmitted.
-    /// @param rxData               Place where received byte should be placed.
+    /// @param txBytes              Data to be transmitted.
+    /// @param rxBytes              Place where received byte should be placed.
     /// @param size                 Number of data to transmit and/or receive.
     /// @param timeout              Maximal time to wait for the bus.
-    /// @param actualReadSize       Actual number of received bytes.
-    /// @return Error code of the operation.
-    virtual std::error_code drvTransfer(const std::uint8_t* txBytes,
-                                        std::uint8_t* rxBytes,
-                                        std::size_t size,
-                                        osal::Timeout timeout,
-                                        std::size_t& actualReadSize)
-        = 0;
+    /// @return Number of received bytes or error code of the operation.
+    virtual Result<std::size_t>
+    drvTransfer(const std::uint8_t* txBytes, std::uint8_t* rxBytes, std::size_t size, osal::Timeout timeout) = 0;
 
 private:
     std::uint32_t m_userCount{};

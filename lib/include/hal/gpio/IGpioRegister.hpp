@@ -35,6 +35,8 @@
 
 #include "hal/Error.hpp"
 
+#include <utils/types/Result.hpp>
+
 #include <system_error>
 
 namespace hal::gpio {
@@ -77,9 +79,8 @@ public:
     virtual std::error_code setDirection(WidthType /*unused*/) { return Error::eOk; }
 
     /// Reads whole value from the GPIO register.
-    /// @param value        Output parameter with value read from the register.
-    /// @return Error code of the operation.
-    virtual std::error_code get(WidthType& /*unused*/) { return Error::eOk; }
+    /// @return Read value or error code of the operation.
+    virtual Result<WidthType> get() { return Error::eOk; }
 
     /// Writes whole value to the GPIO register.
     /// @param value        Value to be set in the register.

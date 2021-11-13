@@ -165,28 +165,25 @@ II2c::write(std::uint16_t address, const std::uint8_t* bytes, std::size_t size, 
     return drvWrite(address, bytes, size, stop, timeout);
 }
 
-std::error_code II2c::read(std::uint16_t address, BytesVector& bytes, std::size_t size, osal::Timeout timeout)
+Result<BytesVector> II2c::read(std::uint16_t address, std::size_t size, osal::Timeout timeout)
 {
-    bytes.resize(size);
+    BytesVector bytes(size);
     if (bytes.size() != size) {
         I2cLogger::error("Failed to read: cannot resize output vector");
         return Error::eNoMemory;
     }
 
-    std::size_t actualReadSize{};
-    auto error = read(address, bytes.data(), size, timeout, actualReadSize);
-    bytes.resize(actualReadSize);
-    if (error)
+    auto [actualReadSize, error] = read(address, bytes.data(), size, timeout);
+    if (error) {
         I2cLogger::error("Failed to read: err={}", error.message());
+        return error;
+    }
 
-    return error;
+    bytes.resize(*actualReadSize);
+    return bytes;
 }
 
-std::error_code II2c::read(std::uint16_t address,
-                           std::uint8_t* bytes,
-                           std::size_t size,
-                           osal::Timeout timeout,
-                           std::size_t& actualReadSize)
+Result<std::size_t> II2c::read(std::uint16_t address, std::uint8_t* bytes, std::size_t size, osal::Timeout timeout)
 {
     if (bytes == nullptr) {
         I2cLogger::error("Failed to read: bytes=nullptr");
@@ -198,8 +195,7 @@ std::error_code II2c::read(std::uint16_t address,
         return error;
     }
 
-    actualReadSize = 0;
-    return drvRead(address, bytes, size, timeout, actualReadSize);
+    return drvRead(address, bytes, size, timeout);
 }
 
 bool II2c::isLocked()
