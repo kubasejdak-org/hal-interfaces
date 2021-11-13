@@ -34,7 +34,7 @@
 
 #include "hal/Device.hpp"
 
-#include <system_error>
+#include <utils/types/Result.hpp>
 
 namespace hal::sensor {
 
@@ -45,9 +45,8 @@ public:
     IHumiditySensor();
 
     /// Reads the current relative humidity value from the sensor.
-    /// @param relativeHumidity         Output parameter with the humidity percentage in range 0-100 %.
-    /// @return Error code of the operation.
-    std::error_code read(float& relativeHumidity);
+    /// @return Humidity percentage in range 0-100 % or error code of the operation.
+    Result<float> read();
 
     /// Returns the minimal value of the humidity that can be returned from this device.
     /// @return Minimal value of the humidity that can be returned from this device.
@@ -61,9 +60,8 @@ public:
 
 private:
     /// Device specific implementation of the method that reads the current relative humidity value.
-    /// @param relativeHumidity         Output parameter with the relative humidity percentage in range 0-100 %.
-    /// @return Error code of the operation.
-    virtual std::error_code drvRead(float& relativeHumidity) = 0;
+    /// @return Humidity percentage in range 0-100 % or error code of the operation.
+    virtual Result<float> drvRead() = 0;
 };
 
 } // namespace hal::sensor

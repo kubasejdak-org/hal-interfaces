@@ -34,6 +34,8 @@
 
 #include "hal/Device.hpp"
 
+#include <utils/types/Result.hpp>
+
 #include <cstring>
 #include <ctime>
 #include <system_error>
@@ -54,14 +56,8 @@ public:
     [[nodiscard]] bool isInitialized() const { return m_initialized; }
 
     /// Returns the current local time in a form of std::tm object.
-    /// @param tm               Output object where the current local time will be placed.
-    /// @return Error code of the operation.
-    std::error_code getTime(std::tm& tm);
-
-    /// Returns the current local time in a form of std::time_t object.
-    /// @param tm               Output object where the current local time will be placed.
-    /// @return Error code of the operation.
-    std::error_code getTime(std::time_t& time);
+    /// @return Read time or error code of the operation.
+    Result<std::tm> getTime();
 
     /// Sets the current local time in a form of std::tm object.
     /// @param tm               Time to be set. Does not require tm_wday and tm_yday fields to be set.
@@ -71,19 +67,10 @@ public:
     /// @see isValidTime()
     std::error_code setTime(const std::tm& tm);
 
-    /// Sets the current local time in a form of std::time_t object.
-    /// @param tm               Time to be set.
-    /// @return Error code of the operation.
-    /// @note This function may internally change actual date & time by filling some of the missing fields
-    ///       and adjusting invalid values to the correct ones.
-    /// @see isValidTime()
-    std::error_code setTime(const std::time_t& time);
-
 private:
     /// Driver specific implementation of getting the current local time in a form of std::tm object.
-    /// @param tm               Output object where the current local time will be placed.
-    /// @return Error code of the operation.
-    virtual std::error_code drvGetTime(std::tm& tm) = 0;
+    /// @return Read time or error code of the operation.
+    virtual Result<std::tm> drvGetTime() = 0;
 
     /// Driver specific implementation of setting the current local time in a form of std::tm object.
     /// @param tm               Time to be set.

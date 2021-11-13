@@ -62,23 +62,21 @@ IEeprom::write(std::uint32_t address, const std::uint8_t* bytes, std::size_t siz
     return drvWrite(address, bytes, size, timeout);
 }
 
-std::error_code IEeprom::read(std::uint32_t address, BytesVector& bytes, std::size_t size, osal::Timeout timeout)
+Result<BytesVector> IEeprom::read(std::uint32_t address, std::size_t size, osal::Timeout timeout)
 {
-    bytes.resize(size);
+    BytesVector bytes(size);
     if (bytes.size() != size)
         return Error::eNoMemory;
 
-    std::size_t actualReadSize{};
-    auto error = read(address, bytes.data(), size, timeout, actualReadSize);
-    bytes.resize(actualReadSize);
-    return error;
+    auto [actualReadSize, error] = read(address, bytes.data(), size, timeout);
+    if (error)
+        return error;
+
+    bytes.resize(*actualReadSize);
+    return bytes;
 }
 
-std::error_code IEeprom::read(std::uint32_t address,
-                              std::uint8_t* bytes,
-                              std::size_t size,
-                              osal::Timeout timeout,
-                              std::size_t& actualReadSize)
+Result<std::size_t> IEeprom::read(std::uint32_t address, std::uint8_t* bytes, std::size_t size, osal::Timeout timeout)
 {
     if ((address + size) > getSize())
         return Error::eInvalidArgument;
@@ -86,8 +84,7 @@ std::error_code IEeprom::read(std::uint32_t address,
     if (bytes == nullptr)
         return Error::eInvalidArgument;
 
-    actualReadSize = 0;
-    return drvRead(address, bytes, size, timeout, actualReadSize);
+    return drvRead(address, bytes, size, timeout);
 }
 
 } // namespace hal::storage

@@ -37,6 +37,7 @@
 #include "hal/types.hpp"
 
 #include <osal/Timeout.hpp>
+#include <utils/types/Result.hpp>
 
 #include <system_error>
 
@@ -79,30 +80,22 @@ public:
 
     /// Reads the demanded number of bytes from the current EEPROM device.
     /// @param address              Location address, from where the data should be read.
-    /// @param bytes                Vector where the read data will be placed by this method.
     /// @param size                 Number of bytes to be read from the current EEPROM device.
     /// @param timeout              Maximal time to wait for the data.
-    /// @return Error code of the operation.
-    /// @note This method does not assume, that the output vector has the proper capacity. It will be
-    ///       automatically expanded, if needed, by the container itself. Size of the vector after call
-    ///       to this method will indicate the actual number of read bytes.
-    std::error_code read(std::uint32_t address, BytesVector& bytes, std::size_t size, osal::Timeout timeout);
+    /// @return Vector with read data or error code of the operation.
+    /// @note Size of the vector after call to this method will indicate the actual number of read bytes.
+    Result<BytesVector> read(std::uint32_t address, std::size_t size, osal::Timeout timeout);
 
     /// Reads the demanded number of bytes from the current EEPROM device.
     /// @param address              Location address, from where the data should be read.
     /// @param bytes                Memory block where the read data will be placed by this method.
     /// @param size                 Number of bytes to be read from the current EEPROM device.
     /// @param timeout              Maximal time to wait for the data.
-    /// @param actualReadSize       Actual number of read bytes.
-    /// @return Error code of the operation.
-    /// @note This method assumes, that the output memory block has the proper capacity. After call to this
-    ///       method the 'actualReadSize' parameter will indicate the actual number of received bytes.
+    /// @return Number of read bytes or error code of the operation.
+    /// @note This method assumes, that the output memory block has the proper capacity. After successful call to this
+    ///       method the return value will indicate the actual number of received bytes.
     ///       It is also assumed, that output memory block is empty.
-    std::error_code read(std::uint32_t address,
-                         std::uint8_t* bytes,
-                         std::size_t size,
-                         osal::Timeout timeout,
-                         std::size_t& actualReadSize);
+    Result<std::size_t> read(std::uint32_t address, std::uint8_t* bytes, std::size_t size, osal::Timeout timeout);
 
 private:
     /// Driver specific implementation of storing the memory block of bytes.
@@ -120,14 +113,9 @@ private:
     /// @param bytes                Memory block where the read data will be placed by this method.
     /// @param size                 Number of bytes to be read from the current EEPROM driver.
     /// @param timeout              Maximal time to wait for the data.
-    /// @param actualReadSize       Actual number of received bytes.
-    /// @return Error code of the operation.
-    virtual std::error_code drvRead(std::uint32_t address,
-                                    std::uint8_t* bytes,
-                                    std::size_t size,
-                                    osal::Timeout timeout,
-                                    std::size_t& actualReadSize)
-        = 0;
+    /// @return Number of read bytes or error code of the operation.
+    virtual Result<std::size_t>
+    drvRead(std::uint32_t address, std::uint8_t* bytes, std::size_t size, osal::Timeout timeout) = 0;
 
 private:
     std::size_t m_size;

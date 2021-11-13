@@ -37,7 +37,7 @@
 #include "hal/Error.hpp"
 #include "hal/gpio/types.hpp"
 
-#include <system_error>
+#include <utils/types/Result.hpp>
 
 namespace hal::gpio {
 
@@ -56,9 +56,8 @@ public:
     {}
 
     /// Reads the value of this GPIO pin set and returns it as an output argument.
-    /// @param value                Output argument with bit values of each pin from this port.
-    /// @return Error code of the operation.
-    virtual std::error_code get(WidthType& value) = 0;
+    /// @return Read value or error code of the operation.
+    virtual Result<WidthType> get() = 0;
 };
 
 } // namespace hal::gpio

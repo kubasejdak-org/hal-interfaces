@@ -39,6 +39,7 @@
 
 #include <osal/Mutex.hpp>
 #include <osal/ScopedLock.hpp>
+#include <utils/types/Result.hpp>
 
 #include <memory>
 #include <system_error>
@@ -69,7 +70,7 @@ public:
     }
 
     /// @see IGpioPort::get().
-    std::error_code get(WidthType& data, WidthType mask) override
+    Result<WidthType> get(WidthType mask) override
     {
         osal::ScopedLock lock(m_mutex);
         m_direction |= mask;
@@ -77,12 +78,11 @@ public:
         if (auto error = m_register->setDirection(m_direction))
             return error;
 
-        WidthType tmp;
-        auto error = m_register->get(tmp);
-        if (!error)
-            data = tmp & mask;
+        auto [value, error] = m_register->get();
+        if (error)
+            return error;
 
-        return error;
+        return static_cast<WidthType>(*value & mask);
     }
 
     /// @see IGpioPort::set().
