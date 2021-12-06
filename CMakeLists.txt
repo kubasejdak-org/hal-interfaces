@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.21)
 
 # Define application settings.
 include(settings.cmake)
@@ -9,13 +9,18 @@ include(cmake/osal.cmake)
 include(cmake/platform.cmake)
 include(cmake/utils.cmake)
 
-project(hal-interfacs VERSION 1.0.0 LANGUAGES ASM C CXX)
+project(hal-interfaces VERSION 1.0.0 LANGUAGES ASM C CXX)
 
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)
 endif ()
 
-conan_init()
+if (USE_CONAN)
+    conan_init_profile()
+    conan_cmake_install(PATH_OR_REFERENCE ${CMAKE_SOURCE_DIR} BUILD missing PROFILE_BUILD default PROFILE_HOST conan-profile)
+    conan_load_buildinfo()
+    conan_basic_setup()
+endif ()
 
 # Project-wide compilation options.
 add_compile_options(-Wall -Wextra -Wpedantic -Werror $<$<COMPILE_LANGUAGE:CXX>:-std=c++17>)
