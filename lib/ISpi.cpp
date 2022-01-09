@@ -211,7 +211,7 @@ Result<std::size_t>
 ISpi::transfer(const std::uint8_t* txBytes, std::uint8_t* rxBytes, std::size_t size, osal::Timeout timeout)
 {
     if ((txBytes == nullptr) && (rxBytes == nullptr)) {
-        SpiLogger::error("Failed to transfer: txBytes={}, rxBytes={}", txBytes, rxBytes);
+        SpiLogger::error("Failed to transfer: txBytes={}, rxBytes={}", fmt::ptr(txBytes), fmt::ptr(rxBytes));
         return Error::eInvalidArgument;
     }
 
