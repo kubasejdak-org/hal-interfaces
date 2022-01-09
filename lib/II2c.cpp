@@ -50,7 +50,7 @@ bool verifyAddress(AddressingMode addressingMode, std::uint16_t address)
         default: break;
     }
 
-    I2cLogger::critical("Bad I2C address: addressingMode={}, address={}", addressingMode, address);
+    I2cLogger::critical("Bad I2C address: addressingMode={}, address={}", int(addressingMode), address);
     return false;
 }
 
