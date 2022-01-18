@@ -4,7 +4,7 @@
 /// @author Kuba Sejdak
 /// @copyright BSD 2-Clause License
 ///
-/// Copyright (c) 2019-2021, Kuba Sejdak <kuba.sejdak@gmail.com>
+/// Copyright (c) 2019-2022, Kuba Sejdak <kuba.sejdak@gmail.com>
 /// All rights reserved.
 ///
 /// Redistribution and use in source and binary forms, with or without
@@ -41,8 +41,7 @@
 namespace hal::gpio {
 
 /// Represents possible bits from the GPIO ports.
-enum class Pin
-{
+enum class Pin {
     eBit0,
     eBit1,
     eBit2,

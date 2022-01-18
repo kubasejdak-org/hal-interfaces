@@ -5,7 +5,7 @@
 /// @author Kuba Sejdak
 /// @copyright BSD 2-Clause License
 ///
-/// Copyright (c) 2019-2021, Kuba Sejdak <kuba.sejdak@gmail.com>
+/// Copyright (c) 2019-2022, Kuba Sejdak <kuba.sejdak@gmail.com>
 /// All rights reserved.
 ///
 /// Redistribution and use in source and binary forms, with or without
@@ -41,8 +41,7 @@ namespace hal {
 
 /// Represents possible sharing policies of the HAL devices. Single devices can be only returned once from HAL,
 /// while shared devices can be returned multiple times and are internally synchronized if needed.
-enum class SharingPolicy
-{
+enum class SharingPolicy {
     eSingle,
     eShared
 };

@@ -5,7 +5,7 @@
 /// @author Kuba Sejdak
 /// @copyright BSD 2-Clause License
 ///
-/// Copyright (c) 2019-2021, Kuba Sejdak <kuba.sejdak@gmail.com>
+/// Copyright (c) 2019-2022, Kuba Sejdak <kuba.sejdak@gmail.com>
 /// All rights reserved.
 ///
 /// Redistribution and use in source and binary forms, with or without
@@ -45,8 +45,7 @@
 namespace hal::uart {
 
 /// Represents the baud rate (speed) used in the UART transmission.
-enum class Baudrate
-{
+enum class Baudrate {
     e1200 = 1200,     // NOLINT
     e2400 = 2400,     // NOLINT
     e4800 = 4800,     // NOLINT
@@ -61,14 +60,12 @@ enum class Baudrate
 };
 
 /// Represents possible UART configurations in traditional form (<data bits><parity><stop bits>).
-enum class Mode
-{
+enum class Mode {
     e8n1 // NOLINT
 };
 
 /// Represents the flow control selected to be used in the UART transmission.
-enum class FlowControl
-{
+enum class FlowControl {
     eNone,
     eRtsCts,
     eXonXoff

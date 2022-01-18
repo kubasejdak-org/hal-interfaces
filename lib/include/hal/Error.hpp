@@ -4,7 +4,7 @@
 /// @author Kuba Sejdak
 /// @copyright BSD 2-Clause License
 ///
-/// Copyright (c) 2019-2021, Kuba Sejdak <kuba.sejdak@gmail.com>
+/// Copyright (c) 2019-2022, Kuba Sejdak <kuba.sejdak@gmail.com>
 /// All rights reserved.
 ///
 /// Redistribution and use in source and binary forms, with or without
@@ -38,8 +38,7 @@
 namespace hal {
 
 /// Represents possible error codes returned from HAL.
-enum class Error
-{
+enum class Error {
     eOk,
     eInvalidArgument,
     eWrongState,

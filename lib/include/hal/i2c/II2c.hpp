@@ -5,7 +5,7 @@
 /// @author Kuba Sejdak
 /// @copyright BSD 2-Clause License
 ///
-/// Copyright (c) 2020-2021, Kuba Sejdak <kuba.sejdak@gmail.com>
+/// Copyright (c) 2020-2022, Kuba Sejdak <kuba.sejdak@gmail.com>
 /// All rights reserved.
 ///
 /// Redistribution and use in source and binary forms, with or without
@@ -46,8 +46,7 @@
 namespace hal::i2c {
 
 /// Represents the I2C addressing mode.
-enum class AddressingMode
-{
+enum class AddressingMode {
     e7bit, // NOLINT(readability-identifier-naming)
     e10bit // NOLINT(readability-identifier-naming)
 };
