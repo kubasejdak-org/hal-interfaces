@@ -16,6 +16,7 @@ if (NOT CMAKE_BUILD_TYPE)
 endif ()
 
 if (USE_CONAN)
+    conan_init_wrapper()
     conan_init_profile()
     conan_cmake_install(PATH_OR_REFERENCE ${CMAKE_SOURCE_DIR} BUILD missing PROFILE_BUILD default PROFILE_HOST conan-profile)
     conan_load_buildinfo()
@@ -23,7 +24,7 @@ if (USE_CONAN)
 endif ()
 
 # Project-wide compilation options.
-add_compile_options(-Wall -Wextra -Wpedantic -Werror $<$<COMPILE_LANGUAGE:CXX>:-std=c++17>)
+add_compile_options(-Wall -Wextra -Wpedantic -Werror $<$<COMPILE_LANGUAGE:CXX>:-std=c++20>)
 
 add_subdirectory(${platform_SOURCE_DIR}/app ${platform_BINARY_DIR})
 add_subdirectory(${osal_SOURCE_DIR}/lib ${osal_BINARY_DIR})
