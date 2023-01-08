@@ -23,6 +23,6 @@ target_include_directories(hal-interfaces
 )
 
 target_link_libraries(hal-interfaces
-    PUBLIC osal::cpp utils::types utils::registry
+    PUBLIC osal::cpp utils::registry utils::types
     PRIVATE hal::interfaces-logger
 )
