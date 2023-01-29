@@ -37,6 +37,7 @@
 
 #include <cassert>
 #include <cerrno>
+#include <cstring>
 
 namespace hal::time {
 
@@ -53,7 +54,7 @@ static bool isValidTime(std::tm& tm)
     std::tm toConvert = tm;
     auto time = std::mktime(&toConvert);
     if (time == static_cast<std::time_t>(-1)) {
-        RtcLogger::error("Invalid std::tm value: std::mktime() returned err={}", strerror(errno));
+        RtcLogger::error("Invalid std::tm value: std::mktime() returned err={}", std::strerror(errno));
         return false;
     }
 

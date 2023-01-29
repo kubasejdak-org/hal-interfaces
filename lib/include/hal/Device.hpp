@@ -33,7 +33,7 @@
 
 #pragma once
 
-#include <cstdint>
+#include <cstddef>
 #include <memory>
 #include <system_error>
 

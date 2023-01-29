@@ -39,10 +39,8 @@
 
 #include <osal/Mutex.hpp>
 #include <osal/ScopedLock.hpp>
-#include <utils/types/Result.hpp>
 
 #include <memory>
-#include <system_error>
 #include <utility>
 
 namespace hal::gpio {

@@ -36,6 +36,7 @@
 #include "hal/logger/interfaces.hpp"
 
 #include <cassert>
+#include <utility>
 
 namespace hal::i2c {
 

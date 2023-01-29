@@ -34,9 +34,7 @@
 
 #include <bitset>
 #include <cassert>
-#include <cstdint>
 #include <type_traits>
-#include <vector>
 
 namespace hal::gpio {
 

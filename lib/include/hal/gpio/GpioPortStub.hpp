@@ -35,10 +35,6 @@
 #include "hal/Error.hpp"
 #include "hal/gpio/IGpioPort.hpp"
 
-#include <utils/types/Result.hpp>
-
-#include <system_error>
-
 namespace hal::gpio {
 
 /// Represents the GPIO port stub with the defined width.

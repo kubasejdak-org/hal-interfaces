@@ -36,7 +36,6 @@
 
 #include <utils/types/Result.hpp>
 
-#include <cstring>
 #include <ctime>
 #include <system_error>
 

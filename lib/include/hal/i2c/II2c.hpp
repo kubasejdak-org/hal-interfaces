@@ -40,6 +40,7 @@
 #include <utils/registry/GlobalRegistry.hpp>
 #include <utils/types/Result.hpp>
 
+#include <cstddef>
 #include <cstdint>
 #include <system_error>
 
