@@ -35,12 +35,9 @@
 
 #include "hal/Device.hpp"
 #include "hal/Error.hpp"
-#include "hal/IBoard.hpp"
 #include "hal/gpio/IGpioPort.hpp"
 #include "hal/gpio/IPinInput.hpp"
 #include "hal/gpio/types.hpp"
-
-#include <utils/types/Result.hpp>
 
 #include <cassert>
 #include <memory>

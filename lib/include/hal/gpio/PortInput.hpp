@@ -36,8 +36,7 @@
 #include "hal/Device.hpp"
 #include "hal/gpio/IGpioPort.hpp"
 #include "hal/gpio/IPortInput.hpp"
-
-#include <utils/types/Result.hpp>
+#include "hal/gpio/types.hpp"
 
 #include <functional>
 #include <memory>
